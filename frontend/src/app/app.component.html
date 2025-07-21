@@ -1,0 +1,23 @@
+<header class="py-8 w-full">
+  <nav class="container flex items-center">
+    <p class="uppercase font-medium">{{ title }}</p>
+
+    <ul class="flex items-center gap-4 lg:gap-8 ml-12 lg:ml-24">
+      @for (route of ROUTES; track route) {
+      <li>
+        <a
+          [routerLink]="route.path"
+          routerLinkActive="text-primary-700 font-medium underline underline-offset-4"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="transition-colors hover:text-primary-700"
+          >{{ route.name }}</a
+        >
+      </li>
+      }
+    </ul>
+  </nav>
+</header>
+
+<main class="container flex-grow py-8">
+  <router-outlet />
+</main>

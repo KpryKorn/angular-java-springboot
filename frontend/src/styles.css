@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+@plugin "tailwindcss-primeui";
+
+* {
+  letter-spacing: -0.025em;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+i.pi {
+  @apply text-2xl text-primary py-2 mr-1 rounded;
+}
+
+body {
+  font-family: "Geist Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+app-root {
+  @apply m-0 flex flex-col min-h-dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
