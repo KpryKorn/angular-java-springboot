@@ -1,13 +1,12 @@
 import { Routes } from '@angular/router';
-import { TrackerComponent } from './components/pages/tracker/tracker.component';
-
+import { HomePageComponent } from './components/pages/home-page/home-page.component';
 export const routes: Routes = [
   {
-    path: 'tracker',
-    component: TrackerComponent,
+    path: '',
+    component: HomePageComponent,
   },
   {
     path: '**',
-    redirectTo: 'tracker',
+    redirectTo: '',
   },
 ];
