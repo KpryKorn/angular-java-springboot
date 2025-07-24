@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,6 +49,13 @@ public class TaskController {
     @PutMapping("/tasks/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task taskDetails) {
         Task updatedTask = taskService.updateTask(id, taskDetails);
+        return ResponseEntity.ok(updatedTask);
+    }
+
+    @PatchMapping("/tasks/{id}")
+    public ResponseEntity<Task> patchTask(@PathVariable Long id,
+            @RequestBody Task taskDetails) {
+        Task updatedTask = taskService.patchTask(id, taskDetails);
         return ResponseEntity.ok(updatedTask);
     }
 

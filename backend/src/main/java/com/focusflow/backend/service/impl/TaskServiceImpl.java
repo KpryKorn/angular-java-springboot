@@ -50,4 +50,21 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
         taskRepository.delete(task);
     }
+
+    @Override
+    public Task patchTask(Long id, Task taskDetails) {
+        Task existingTask = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+
+        if (taskDetails.getTitle() != null) {
+            existingTask.setTitle(taskDetails.getTitle());
+        }
+        if (taskDetails.getDescription() != null) {
+            existingTask.setDescription(taskDetails.getDescription());
+        }
+        if (taskDetails.getDone() != null) {
+            existingTask.setDone(taskDetails.getDone());
+        }
+        return taskRepository.save(existingTask);
+    }
 }
