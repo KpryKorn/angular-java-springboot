@@ -45,7 +45,7 @@ export class TaskService {
     );
   }
 
-  createTask(task: Task): Observable<Task> {
+  createTask(task: Omit<Task, 'id'>): Observable<Task> {
     this._loading.set(true);
     this._error.set(null);
 
@@ -66,6 +66,24 @@ export class TaskService {
     this._error.set(null);
 
     return this.http.put<Task>(`${this.url}/${id}`, taskData).pipe(
+      tap((updatedTask) => {
+        this._tasks.update((tasks) =>
+          tasks.map((task) => (task.id === id ? updatedTask : task))
+        );
+      }),
+      catchError((error) => {
+        this._error.set(error.message);
+        return throwError(() => error);
+      }),
+      finalize(() => this._loading.set(false))
+    );
+  }
+
+  patchTask(id: string, taskData: Partial<Task>): Observable<Task> {
+    this._loading.set(true);
+    this._error.set(null);
+
+    return this.http.patch<Task>(`${this.url}/${id}`, taskData).pipe(
       tap((updatedTask) => {
         this._tasks.update((tasks) =>
           tasks.map((task) => (task.id === id ? updatedTask : task))
@@ -102,6 +120,6 @@ export class TaskService {
       return throwError(() => new Error('Task not found'));
     }
 
-    return this.updateTask(id, { done: !task.done });
+    return this.patchTask(id, { done: !task.done });
   }
 }
