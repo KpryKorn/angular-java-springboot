@@ -61,6 +61,29 @@ export class TaskService {
     );
   }
 
+  getTaskById(id: string): Observable<Task> {
+    this._loading.set(true);
+    this._error.set(null);
+
+    return this.http.get<Task>(`${this.url}/${id}`).pipe(
+      tap((task) => {
+        const currentTasks = this._tasks();
+        const taskExists = currentTasks.some((t) => t.id === id);
+
+        if (!taskExists) {
+          this._tasks.update((tasks) => [...tasks, task]);
+        }
+      }),
+      catchError((error) => {
+        this._error.set(error.message || `Tâche ${id} non trouvée`);
+        return throwError(() => error);
+      }),
+      finalize(() => {
+        this._loading.set(false);
+      })
+    );
+  }
+
   updateTask(id: string, taskData: Partial<Task>): Observable<Task> {
     this._loading.set(true);
     this._error.set(null);
