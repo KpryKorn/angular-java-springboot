@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { TaskService } from '../../../services/tasks/task.service';
+import { TaskStoreService } from '../../../services/tasks/task-store.service';
 import {
   FormBuilder,
   FormGroup,
@@ -14,15 +14,15 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home-page.component.html',
 })
 export class HomePageComponent implements OnInit {
-  private readonly taskService = inject(TaskService);
+  private readonly taskStore = inject(TaskStoreService);
   private readonly fb = inject(FormBuilder);
 
-  readonly tasks = this.taskService.tasks;
-  readonly loading = this.taskService.loading;
-  readonly error = this.taskService.error;
+  readonly tasks = this.taskStore.tasks;
+  readonly loading = this.taskStore.loading;
+  readonly error = this.taskStore.error;
 
-  completedTasks = this.taskService.completedTasks;
-  pendingTasks = this.taskService.pendingTasks;
+  completedTasks = this.taskStore.completedTasks;
+  pendingTasks = this.taskStore.pendingTasks;
 
   readonly taskForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
@@ -30,7 +30,7 @@ export class HomePageComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.taskService.getTasks().subscribe();
+    this.taskStore.loadTasks().subscribe();
   }
 
   createTask(): void {
@@ -42,7 +42,7 @@ export class HomePageComponent implements OnInit {
         done: false,
       };
 
-      this.taskService.createTask(newTask).subscribe({
+      this.taskStore.createTask(newTask).subscribe({
         next: () => {
           this.taskForm.reset();
         },
@@ -61,14 +61,14 @@ export class HomePageComponent implements OnInit {
   }
 
   toggleTask(id: string) {
-    this.taskService.toggleTaskDone(id).subscribe();
+    this.taskStore.toggleTaskDone(id).subscribe();
   }
 
   deleteTask(id: string) {
-    this.taskService.deleteTask(id).subscribe();
+    this.taskStore.deleteTask(id).subscribe();
   }
 
   clearError() {
-    this.taskService.clearError();
+    this.taskStore.clearError();
   }
 }

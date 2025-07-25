@@ -1,10 +1,10 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map, catchError, of } from 'rxjs';
-import { TaskService } from '../services/tasks/task.service';
+import { TaskStoreService } from '../services/tasks/task-store.service';
 
 export const taskExistsGuard: CanActivateFn = (route, state) => {
-  const taskService = inject(TaskService);
+  const taskStore = inject(TaskStoreService);
   const router = inject(Router);
   const taskId = route.paramMap.get('id');
 
@@ -13,12 +13,31 @@ export const taskExistsGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  return taskService.getTaskById(taskId).pipe(
-    map(() => true),
-    catchError((error) => {
-      console.error('Tâche non trouvée:', error);
-      router.navigate(['/tasks']);
-      return of(false);
-    })
-  );
+  // Si les tâches ne sont pas chargées, les charger d'abord
+  if (taskStore.tasks().length === 0) {
+    return taskStore.loadTasks().pipe(
+      map(() => {
+        const taskExists = taskStore
+          .tasks()
+          .some((task) => task.id.toString() === taskId);
+        if (!taskExists) {
+          router.navigate(['/tasks']);
+        }
+        return taskExists;
+      }),
+      catchError(() => {
+        router.navigate(['/tasks']);
+        return of(false);
+      })
+    );
+  }
+
+  // Les tâches sont déjà chargées, vérifier directement
+  const taskExists = taskStore
+    .tasks()
+    .some((task) => task.id.toString() === taskId);
+  if (!taskExists) {
+    router.navigate(['/tasks']);
+  }
+  return taskExists;
 };

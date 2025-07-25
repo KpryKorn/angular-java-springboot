@@ -50,7 +50,7 @@
     <div class="flex gap-3 pt-4 border-t">
       <button
         (click)="toggleTask(task()!.id)"
-        [disabled]="taskService.loading()"
+        [disabled]="taskStore.loading()"
         class="flex-1 px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
         [class]="
           task()!.done

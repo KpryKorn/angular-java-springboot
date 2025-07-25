@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { TaskService } from '../../../services/tasks/task.service';
+import { TaskStoreService } from '../../../services/tasks/task-store.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -9,12 +9,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TaskDetailPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  readonly taskService = inject(TaskService);
+  readonly taskStore = inject(TaskStoreService);
   readonly taskId = signal<string>('');
 
   readonly task = computed(() => {
     const id = this.taskId();
-    const tasks = this.taskService.tasks();
+    const tasks = this.taskStore.tasks();
     return tasks.find((task) => task.id.toString() === id) || null;
   });
 
@@ -26,6 +26,6 @@ export class TaskDetailPageComponent implements OnInit {
   }
 
   toggleTask(id: string) {
-    this.taskService.toggleTaskDone(id).subscribe();
+    this.taskStore.toggleTaskDone(id).subscribe();
   }
 }
