@@ -1,1 +1,90 @@
-<p>task-detail-page works!</p>
+<div>
+  @if (task()) {
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <!-- En-tête -->
+    <div class="flex items-start justify-between mb-6">
+      <div class="flex-1">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">
+          {{ task()!.title }}
+        </h1>
+        <div class="flex items-center gap-2">
+          <span
+            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+            [class]="
+              task()!.done
+                ? 'bg-green-100 text-green-800'
+                : 'bg-yellow-100 text-yellow-800'
+            "
+          >
+            {{ task()!.done ? "Terminée" : "En cours" }}
+          </span>
+        </div>
+      </div>
+
+      <button class="text-gray-400 hover:text-gray-600 transition-colors">
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Contenu -->
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">Description</h2>
+      <p class="text-gray-700 leading-relaxed">
+        {{ task()!.description }}
+      </p>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-3 pt-4 border-t">
+      <button
+        (click)="toggleTask(task()!.id)"
+        [disabled]="taskService.loading()"
+        class="flex-1 px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
+        [class]="
+          task()!.done
+            ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+            : 'bg-green-100 text-green-800 hover:bg-green-200'
+        "
+      >
+        {{
+          task()!.done ? "Marquer comme non terminée" : "Marquer comme terminée"
+        }}
+      </button>
+    </div>
+  </div>
+  } @else {
+  <div class="text-center py-12">
+    <div class="text-gray-400 mb-4">
+      <svg
+        class="mx-auto h-12 w-12"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 20.4a7.962 7.962 0 01-5-1.109m0 0L5.5 17.5M7 8.291V7a3 3 0 013-3h4a3 3 0 013 3v1.291"
+        />
+      </svg>
+    </div>
+    <h2 class="text-xl font-semibold text-gray-900 mb-2">Tâche non trouvée</h2>
+    <p class="text-gray-600 mb-4">
+      La tâche que vous recherchez n'existe plus.
+    </p>
+  </div>
+  }
+</div>
