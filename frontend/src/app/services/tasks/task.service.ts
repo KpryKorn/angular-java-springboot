@@ -122,4 +122,8 @@ export class TaskService {
 
     return this.patchTask(id, { done: !task.done });
   }
+
+  clearError(): void {
+    this._error.set(null);
+  }
 }

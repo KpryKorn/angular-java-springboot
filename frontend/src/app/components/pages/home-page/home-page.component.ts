@@ -15,7 +15,13 @@ import {
 export class HomePageComponent implements OnInit {
   private readonly taskService = inject(TaskService);
   private readonly fb = inject(FormBuilder);
-  tasks = this.taskService.tasks;
+
+  readonly tasks = this.taskService.tasks;
+  readonly loading = this.taskService.loading;
+  readonly error = this.taskService.error;
+
+  completedTasks = this.taskService.completedTasks;
+  pendingTasks = this.taskService.pendingTasks;
 
   readonly taskForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
@@ -59,5 +65,9 @@ export class HomePageComponent implements OnInit {
 
   deleteTask(id: string) {
     this.taskService.deleteTask(id).subscribe();
+  }
+
+  clearError() {
+    this.taskService.clearError();
   }
 }
